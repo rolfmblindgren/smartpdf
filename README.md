@@ -38,6 +38,8 @@ make watch-config
 
 That installs a starter file from `config/smartpdf-watch.conf.example` if you do not already have one. Edit it if your source, destination, trash, or `smartpdf` path differs.
 
+The watcher prefers a real trash command when one exists. On macOS, `~/.Trash` is the normal home trash folder. On Linux, there is no single universal `~/.Trash`, so the script tries `trash` or `gio trash` first and only falls back to the configured trash folder if it has to.
+
 ```sh
 make watch-install
 ```
@@ -48,7 +50,7 @@ That watcher:
 - watches the configured source folder
 - runs `smartpdf` on PDFs that have settled
 - writes finished files to the configured destination
-- moves originals into the configured trash folder
+- moves originals to the system trash when possible, otherwise to the configured fallback trash folder
 
 To remove it later:
 

@@ -13,12 +13,31 @@ fi
 
 SOURCE_DIR="${SMARTPDF_SOURCE_DIR:-$HOME/Dropbox/From_BrotherDevice}"
 DEST_DIR="${SMARTPDF_DEST_DIR:-$HOME/Tresorit/Scanned Documents}"
-TRASH_DIR="${SMARTPDF_TRASH_DIR:-$HOME/.Trash}"
 SMARTPDF_BIN="${SMARTPDF_BIN:-$HOME/bin/smartpdf}"
 LOCK_FILE="${SMARTPDF_LOCK_FILE:-${TMPDIR:-/tmp}/smartpdf-watch.lock}"
 STALE_SECONDS="${SMARTPDF_STALE_SECONDS:-15}"
 
 have() { command -v "$1" >/dev/null 2>&1; }
+
+default_trash_dir() {
+  case "$(uname -s)" in
+    Darwin)
+      printf '%s\n' "$HOME/.Trash"
+      ;;
+    Linux)
+      if [[ -n "${XDG_DATA_HOME:-}" ]]; then
+        printf '%s\n' "$XDG_DATA_HOME/Trash/files"
+      else
+        printf '%s\n' "$HOME/.local/share/Trash/files"
+      fi
+      ;;
+    *)
+      printf '%s\n' "$HOME/.Trash"
+      ;;
+  esac
+}
+
+TRASH_DIR="${SMARTPDF_TRASH_DIR:-$(default_trash_dir)}"
 
 log() {
   printf '%s %s\n' "$(date '+%F %T')" "$*"
@@ -48,13 +67,39 @@ is_stable() {
   (( age >= STALE_SECONDS ))
 }
 
+trash_source() {
+  local src="$1"
+  local base="$2"
+  local trash_target
+
+  if have trash; then
+    if trash "$src"; then
+      printf '%s\n' "original -> system trash"
+      return 0
+    fi
+    log "advarsel: trash feilet, prøver fallback"
+  fi
+
+  if have gio; then
+    if gio trash "$src"; then
+      printf '%s\n' "original -> system trash"
+      return 0
+    fi
+    log "advarsel: gio trash feilet, prøver fallback"
+  fi
+
+  mkdir -p "$TRASH_DIR"
+  trash_target=$(unique_path "$TRASH_DIR/$base")
+  mv "$src" "$trash_target"
+  printf '%s\n' "original -> $(basename "$trash_target")"
+}
+
 process_one() {
   local src="$1"
-  local base tmp_out final_out trash_out trash_target
+  local base tmp_out final_out trash_note
 
   base=$(basename "$src")
   final_out="$DEST_DIR/$base"
-  trash_out="$TRASH_DIR/$base"
   tmp_out="$(mktemp "${TMPDIR:-/tmp}/smartpdf-watch.XXXXXX.pdf")"
 
   if ! "$SMARTPDF_BIN" "$src" "$tmp_out" >/dev/null; then
@@ -63,12 +108,11 @@ process_one() {
     return 1
   fi
 
-  mkdir -p "$DEST_DIR" "$TRASH_DIR"
+  mkdir -p "$DEST_DIR"
   mv -f "$tmp_out" "$final_out"
 
-  trash_target=$(unique_path "$trash_out")
-  mv "$src" "$trash_target"
-  log "ok: $base -> $(basename "$final_out"), original -> $(basename "$trash_target")"
+  trash_note=$(trash_source "$src" "$base")
+  log "ok: $base -> $(basename "$final_out"), $trash_note"
 }
 
 main() {
