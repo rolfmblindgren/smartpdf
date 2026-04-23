@@ -3,7 +3,7 @@
 
 SMARTPDF_SOURCE_DIR="$HOME/Dropbox/From_BrotherDevice"
 SMARTPDF_DEST_DIR="$HOME/Tresorit/Scanned Documents"
-SMARTPDF_TRASH_DIR="$HOME/.Thrash"
+SMARTPDF_TRASH_DIR="$HOME/.Trash"
 SMARTPDF_BIN="$HOME/bin/smartpdf"
 SMARTPDF_STALE_SECONDS=15
 
