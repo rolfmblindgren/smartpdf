@@ -26,11 +26,17 @@ make install
 
 `make deps-admin` refreshes sudo auth first, which is useful on Linux package managers. On macOS with Homebrew, `sudo` is not needed for the install itself.
 
-The Makefile is platform-aware for macOS (`brew`), Debian/Ubuntu (`apt-get`), and Fedora (`dnf`). `pdfcpu` is treated as optional and is installed with `go install` when that is the best fallback.
+The Makefile is platform-aware for macOS (`brew`), Debian/Ubuntu (`apt-get`), and Fedora (`dnf`). `pdfcpu` is treated as optional and is installed with `go install` when that is the best fallback. `make link` creates both `~/bin/smartpdf` and `~/bin/smartpdf-watch`.
 
 ## Automatic Watching
 
-For the BrotherDevice drop folder, the repo also ships a small `launchd` watcher.
+The watcher reads a small shell config file at `~/.config/smartpdf/watch.conf`.
+
+```sh
+make watch-config
+```
+
+That installs a starter file from `config/smartpdf-watch.conf.example` if you do not already have one. Edit it if your source, destination, trash, or `smartpdf` path differs.
 
 ```sh
 make watch-install
@@ -38,10 +44,11 @@ make watch-install
 
 That watcher:
 
-- watches `~/Dropbox/From_BrotherDevice`
+- runs from `~/bin/smartpdf-watch`
+- watches the configured source folder
 - runs `smartpdf` on PDFs that have settled
-- writes finished files to `~/Tresorit/Scanned Documents`
-- moves originals into `~/.Thrash`
+- writes finished files to the configured destination
+- moves originals into the configured trash folder
 
 To remove it later:
 
