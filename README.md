@@ -28,6 +28,27 @@ make install
 
 The Makefile is platform-aware for macOS (`brew`), Debian/Ubuntu (`apt-get`), and Fedora (`dnf`). `pdfcpu` is treated as optional and is installed with `go install` when that is the best fallback.
 
+## Automatic Watching
+
+For the BrotherDevice drop folder, the repo also ships a small `launchd` watcher.
+
+```sh
+make watch-install
+```
+
+That watcher:
+
+- watches `~/Dropbox/From_BrotherDevice`
+- runs `smartpdf` on PDFs that have settled
+- writes finished files to `~/Tresorit/Scanned Documents`
+- moves originals into `~/.Thrash`
+
+To remove it later:
+
+```sh
+make watch-uninstall
+```
+
 ## Notes
 
 - `--pdfa` keeps the output in PDF/A mode.
