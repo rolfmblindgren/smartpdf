@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">smartpdf</title>
+  <desc id="desc">A stylized PDF page with a scan beam on a dark gradient background.</desc>
+  <defs>
+    <linearGradient id="bg" x1="96" y1="48" x2="416" y2="464" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset=".55" stop-color="#123649"/>
+      <stop offset="1" stop-color="#0f766e"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(164 150) scale(132)">
+      <stop offset="0" stop-color="#22d3ee" stop-opacity=".26"/>
+      <stop offset=".7" stop-color="#22d3ee" stop-opacity=".08"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(346 356) scale(146)">
+      <stop offset="0" stop-color="#f59e0b" stop-opacity=".22"/>
+      <stop offset=".72" stop-color="#f59e0b" stop-opacity=".07"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#020617" flood-opacity=".36"/>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" rx="92" fill="url(#bg)"/>
+  <circle cx="164" cy="150" r="132" fill="url(#glowA)"/>
+  <circle cx="346" cy="356" r="146" fill="url(#glowB)"/>
+
+  <g opacity=".22">
+    <path d="M80 112h352" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="2 20"/>
+    <path d="M80 400h352" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="2 20"/>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="150" y="118" width="186" height="250" rx="28" fill="#172033" opacity=".56" transform="rotate(-8 243 243)"/>
+
+    <rect x="162" y="104" width="204" height="272" rx="30" fill="#f8fafc"/>
+    <path d="M336 104h30v30z" fill="#e2e8f0"/>
+    <path d="M336 104h30l-30 30z" fill="#cbd5e1"/>
+
+    <rect x="186" y="136" width="74" height="34" rx="17" fill="#e11d48"/>
+    <text x="223" y="160" fill="#fff" font-family="ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" font-weight="800" text-anchor="middle" letter-spacing=".08em">PDF</text>
+
+    <g transform="rotate(-18 256 256)">
+      <rect x="124" y="247" width="264" height="16" rx="8" fill="#22d3ee" opacity=".18"/>
+      <rect x="124" y="251" width="264" height="4" rx="2" fill="#f59e0b" opacity=".92"/>
+    </g>
+
+    <rect x="188" y="192" width="126" height="12" rx="6" fill="#cbd5e1"/>
+    <rect x="188" y="214" width="108" height="12" rx="6" fill="#dbe4ee"/>
+    <rect x="188" y="236" width="120" height="12" rx="6" fill="#cbd5e1"/>
+    <rect x="188" y="258" width="94" height="12" rx="6" fill="#e2e8f0"/>
+
+    <g transform="translate(304 300)">
+      <circle cx="0" cy="0" r="32" fill="none" stroke="#0f766e" stroke-width="10"/>
+      <path d="M23 23 48 48" fill="none" stroke="#0f766e" stroke-width="10" stroke-linecap="round"/>
+    </g>
+
+    <path d="M306 174l6 12 12 6-12 6-6 12-6-12-12-6 12-6z" fill="#22d3ee"/>
+  </g>
+
+  <!-- Local Variables: -->
+  <!-- mode: nxml -->
+  <!-- End: -->
+</svg>

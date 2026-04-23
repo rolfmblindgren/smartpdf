@@ -1,5 +1,9 @@
 # smartpdf
 
+<p align="center">
+  <img src="smartpdf-logo.svg" alt="smartpdf logo" width="220">
+</p>
+
 A small shell script for choosing a reasonable PDF processing path on macOS.
 
 ## Usage
