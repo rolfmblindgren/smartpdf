@@ -1,10 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+CONFIG_FILE="${SMARTPDF_CONFIG_FILE:-${XDG_CONFIG_HOME:-$HOME/.config}/smartpdf/watch.conf}"
+if [[ -e "$CONFIG_FILE" && ! -r "$CONFIG_FILE" ]]; then
+  printf '%s %s\n' "$(date '+%F %T')" "kan ikke lese config: $CONFIG_FILE" >&2
+  exit 1
+fi
+if [[ -r "$CONFIG_FILE" ]]; then
+  # shellcheck source=/dev/null
+  . "$CONFIG_FILE"
+fi
+
 SOURCE_DIR="${SMARTPDF_SOURCE_DIR:-$HOME/Dropbox/From_BrotherDevice}"
 DEST_DIR="${SMARTPDF_DEST_DIR:-$HOME/Tresorit/Scanned Documents}"
 TRASH_DIR="${SMARTPDF_TRASH_DIR:-$HOME/.Thrash}"
-SMARTPDF_BIN="${SMARTPDF_BIN:-$HOME/src/smartpdf/smartpdf.sh}"
+SMARTPDF_BIN="${SMARTPDF_BIN:-$HOME/bin/smartpdf}"
 LOCK_FILE="${SMARTPDF_LOCK_FILE:-${TMPDIR:-/tmp}/smartpdf-watch.lock}"
 STALE_SECONDS="${SMARTPDF_STALE_SECONDS:-15}"
 
@@ -69,7 +79,7 @@ main() {
     exit 1
   }
 
-  [[ -x "$SMARTPDF_BIN" ]] || {
+  have "$SMARTPDF_BIN" || {
     log "mangler smartpdf: $SMARTPDF_BIN"
     exit 1
   }

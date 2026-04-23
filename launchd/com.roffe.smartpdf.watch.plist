@@ -6,31 +6,23 @@
   <string>com.roffe.smartpdf.watch</string>
   <key>ProgramArguments</key>
   <array>
-    <string>/Users/roffe/src/smartpdf/smartpdf-watch.sh</string>
+    <string>/bin/sh</string>
+    <string>-c</string>
+    <string>exec "$HOME/bin/smartpdf-watch"</string>
   </array>
   <key>RunAtLoad</key>
   <true/>
-  <key>WatchPaths</key>
-  <array>
-    <string>/Users/roffe/Dropbox/From_BrotherDevice</string>
-  </array>
   <key>StartInterval</key>
   <integer>60</integer>
+  <key>StandardOutPath</key>
+  <string>/tmp/smartpdf-watch.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/smartpdf-watch.log</string>
   <key>EnvironmentVariables</key>
   <dict>
-    <key>SMARTPDF_SOURCE_DIR</key>
-    <string>/Users/roffe/Dropbox/From_BrotherDevice</string>
-    <key>SMARTPDF_DEST_DIR</key>
-    <string>/Users/roffe/Tresorit/Scanned Documents</string>
-    <key>SMARTPDF_TRASH_DIR</key>
-    <string>/Users/roffe/.Thrash</string>
-    <key>SMARTPDF_BIN</key>
-    <string>/Users/roffe/src/smartpdf/smartpdf.sh</string>
+    <key>PATH</key>
+    <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
   </dict>
-  <key>StandardOutPath</key>
-  <string>/Users/roffe/Library/Logs/smartpdf-watch.log</string>
-  <key>StandardErrorPath</key>
-  <string>/Users/roffe/Library/Logs/smartpdf-watch.log</string>
   <key>ProcessType</key>
   <string>Background</string>
 </dict>

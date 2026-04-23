@@ -5,14 +5,18 @@ DISTRO_ID ?= $(shell sh -c '. /etc/os-release 2>/dev/null; printf "%s" "$$ID"')
 BIN_DIR ?= $(HOME)/bin
 SCRIPT := smartpdf.sh
 LINK := $(BIN_DIR)/smartpdf
+WATCH_LINK := $(BIN_DIR)/smartpdf-watch
 WATCHER := smartpdf-watch.sh
 PLIST_SRC := launchd/com.roffe.smartpdf.watch.plist
 PLIST_DST := $(HOME)/Library/LaunchAgents/com.roffe.smartpdf.watch.plist
+CONFIG_DIR := $(HOME)/.config/smartpdf
+WATCH_CONF := $(CONFIG_DIR)/watch.conf
+WATCH_CONF_EXAMPLE := config/smartpdf-watch.conf.example
 
 REQUIRED_CMDS := pdfinfo pdffonts pdfimages gs ocrmypdf qpdf
 OPTIONAL_CMDS := pdfcpu
 
-.PHONY: help check deps deps-admin link watch-install watch-uninstall install
+.PHONY: help check deps deps-admin link watch-config watch-install watch-uninstall install
 
 help:
 	@printf '%s\n' \
@@ -21,6 +25,7 @@ help:
 		'  make deps       - install missing dependencies with the local package manager' \
 		'  make deps-admin - same as deps, but refresh sudo auth first' \
 		'  make link       - create ~/bin/smartpdf symlink' \
+		'  make watch-config   - install ~/.config/smartpdf/watch.conf if missing' \
 		'  make watch-install   - install and boot the launchd watcher' \
 		'  make watch-uninstall - unload the launchd watcher' \
 		'  make install    - run deps and link'
@@ -228,11 +233,23 @@ deps-admin:
 link:
 	@mkdir -p "$(BIN_DIR)"
 	@ln -sfn "$(CURDIR)/$(SCRIPT)" "$(LINK)"
+	@ln -sfn "$(CURDIR)/$(WATCHER)" "$(WATCH_LINK)"
 	@echo "Koblet $(LINK) -> $(CURDIR)/$(SCRIPT)"
+	@echo "Koblet $(WATCH_LINK) -> $(CURDIR)/$(WATCHER)"
 
-watch-install: install
+watch-config:
 	@set -eu; \
-	mkdir -p "$(HOME)/Library/LaunchAgents" "$(HOME)/Library/Logs"; \
+	mkdir -p "$(CONFIG_DIR)"; \
+	if [ -f "$(WATCH_CONF)" ]; then \
+		echo "Beholdt eksisterende $(WATCH_CONF)"; \
+	else \
+		install -m 600 "$(WATCH_CONF_EXAMPLE)" "$(WATCH_CONF)"; \
+		echo "Opprettet $(WATCH_CONF)"; \
+	fi
+
+watch-install: install watch-config
+	@set -eu; \
+	mkdir -p "$(HOME)/Library/LaunchAgents"; \
 	cp "$(CURDIR)/$(PLIST_SRC)" "$(PLIST_DST)"; \
 	uid=$$(id -u); \
 	launchctl bootout gui/$$uid "$(PLIST_DST)" >/dev/null 2>&1 || true; \
