@@ -14,6 +14,20 @@ smartpdf INN.pdf UT.pdf [--pdfa]
 - Uses OCRmyPDF for scanned or mixed PDFs.
 - Optionally runs pdfcpu as a final optimization pass when it makes the file smaller.
 
+## Makefile
+
+```sh
+make check
+make deps
+make deps-admin
+make link
+make install
+```
+
+`make deps-admin` refreshes sudo auth first, which is useful on Linux package managers. On macOS with Homebrew, `sudo` is not needed for the install itself.
+
+The Makefile is platform-aware for macOS (`brew`), Debian/Ubuntu (`apt-get`), and Fedora (`dnf`). `pdfcpu` is treated as optional and is installed with `go install` when that is the best fallback.
+
 ## Notes
 
 - `--pdfa` keeps the output in PDF/A mode.
